@@ -6,7 +6,8 @@ photo = tk.PhotoImage(file="white_background_png.png")
 
 global stop_drawing
 stop_drawing = False
-
+global color
+color = (0, 0, 255)
 
 def pixel(image, pos, color):
     """Place pixel at pos=(x,y) on image, with color=(r,g,b)."""
@@ -22,7 +23,8 @@ def pixel(image, pos, color):
 
 def motion(event):
     x, y = event.x, event.y
-    color = (0, 0, 255)
+    global color
+    # color = (0, 0, 255)
 
     # print('{}, {}'.format(x, y))
     # lst.append((x, y))
@@ -46,9 +48,16 @@ def resume(event):
     stop_drawing = False
 
 
+def erase(event):
+    global color
+    color = (255, 255, 255)
+
+
 root.bind('<Motion>', motion)
 root.bind('<Button-1>', pause)
 root.bind('<Button-3>', resume)
+# root.bind('<ButtonRelease-1>', resume)
+root.bind('<Key>', erase)
 label = tk.Label(root, image=photo)
 label.grid()
 root.mainloop()

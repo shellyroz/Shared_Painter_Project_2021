@@ -1,22 +1,50 @@
 import tkinter as tk
-import socket
 from Project_Canvas_Screen import CanvasScreen
+import socket
+from Project_Screens import SampleApp
 
-def main():
-    HOST_IP = '192.168.1.24'
-    DST_PORT = 1729
-    my_socket = socket.socket()
+app = SampleApp()
 
-    try:
-        my_socket.connect((HOST_IP, DST_PORT))
-    except socket.error as exc:
-        print("no server is waiting....")
-        exit()
+class Client (object):
 
-    client_canvas_obj = CanvasScreen()
-    client_canvas_obj.run_canvas()
+    def __init__(self, ip, port):
+        self.ip = ip
+        self.port = port
 
-    # my_socket.close()
+    def start(self):
+        try:
+            print('connecting to ip %s port %s' % (ip, port))
+            # Create a TCP/IP socket
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.connect((ip, port))
+            print('connected to server')
+            # send receive example
+            msg = sock.recv(1024)
+            print('received message: %s' % msg.decode())
+            sock.sendall('Hello this is client, send me a job'.encode())
+            #implement here your main logic
+            while True:
+                self.handleServerJob(sock)
+        except socket.error as e:
+            print(e)
 
-    if __name__ == "__main__":
-        main()
+    def handleServerJob(self, serverSocket):
+        while True:
+            my_request = input("Please enter your request: ")
+            serverSocket.send(my_request.encode())
+            reply = serverSocket.recv(1024).decode()
+            print(reply)
+
+
+            if reply == "SHOW":
+                # canvas_obj = CanvasScreen()
+                # canvas_obj.run_canvas()
+                app.mainloop()
+
+
+
+if __name__ == '__main__':
+    ip = '127.0.0.1'
+    port = 1730
+    c = Client(ip, port)
+    c.start()

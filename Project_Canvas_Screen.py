@@ -1,10 +1,11 @@
 import tkinter as tk
+from tkinter import colorchooser
 
 class CanvasScreen:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("SHARED PAINTER - CANVAS")
-        self.photo = tk.PhotoImage(width=900, height=650)
+        self.photo = tk.PhotoImage(width=900, height=720)
         self.stop_drawing = False
 
 
@@ -15,6 +16,19 @@ class CanvasScreen:
 
         bg_color = "#%02x%02x%02x" % (243, 249, 151)
         self.root["background"] = bg_color
+
+        # frame = tk.Frame(self.root, width=200, height=200, bg=bg_color)
+        # frame.pack(side=tk.LEFT)
+        color_palate_button = tk.Button(self.root, text="Color Palate", bg="medium violet red", fg="snow",
+                                        height=2, width=10)
+        # , command=colorchooser.askcolor()
+        color_palate_button.place(x=10, y=10)
+        color_palate_button.pack()
+
+        brush_size_button = tk.Button(self.root, text="Color Palate", bg="medium violet red", fg="snow",
+                                        height=2, width=10)
+        brush_size_button.place(x=10, y=50)
+        brush_size_button.pack()
 
 
     # global photo
@@ -63,5 +77,12 @@ class CanvasScreen:
         self.root.bind('<Button-1>', self.pause_drawing)
         self.root.bind('<Button-3>', self.resume_drawing)
         label = tk.Label(self.root, image=self.photo)
-        label.grid()
+        # label.grid()
+        # label.place(x=100, y=0)
+        label.pack()
         self.root.mainloop()
+
+
+# if __name__ == "__main__":
+#     app = CanvasScreen()
+#     app.run_canvas()
