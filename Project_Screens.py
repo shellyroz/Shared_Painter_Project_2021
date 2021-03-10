@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import font as tkfont
+from tkinter import colorchooser
 from PIL import Image
 from Project_Canvas_Screen import CanvasScreen
 
@@ -167,74 +168,29 @@ class RandPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        # self.app1 = CanvasScreen()
 
-        # canvas_obj = CanvasScreen()
-        # canvas_obj.run_canvas()
-        label = tk.Label(self, text="This is the rand page", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+
+
+
+    # def __init__(self, parent, controller):
+    #     tk.Frame.__init__(self, parent)
+    #     self.controller = controller
+    #
+    #     canvas_obj = CanvasScreen()
+    #     canvas_obj.design_canvas_screen()
+    #
+    #     label = tk.Label(self, text="This is the rand page", font=controller.title_font)
+    #     label.pack(side="top", fill="x", pady=10)
+    #
+    #     button = tk.Button(self, text="Go to canvas",
+    #                        command=canvas_obj.run_canvas())
+    #     button.pack()
+
+    # def canvas_open(self):
 
         button = tk.Button(self, text="Go to the sign up page",
                            command=lambda: controller.show_frame("SignUpPage"))
         button.pack()
-        # self.app1.run_canvas()
-
-#
-# class RandPage(tk.Frame):
-#
-#     def __init__(self, parent, controller):
-#         tk.Frame.__init__(self, parent)
-#         self.controller = controller
-#
-#     def __init__1(self):
-#         self.root = tk.Tk()
-#         self.root.title("SHARED PAINTER - CANVAS")
-#         self.photo = tk.PhotoImage(width=900, height=650)
-#         self.stop_drawing = False
-#
-#
-#     def color_pixel(self, image, pos, color):
-#         """Place pixel at pos=(x,y) on image, with color=(r,g,b)."""
-#         if self.stop_drawing == False:
-#             r, g, b = color
-#             x, y = pos
-#             image.put("#%02x%02x%02x" % (r, g, b), (x, y))
-#
-#         else:
-#             pass
-#
-#     def detect_motion(self, event):
-#         x, y = event.x, event.y
-#         color = (0, 0, 255)
-#
-#         self.color_pixel(self.photo, (x, y), color)
-#         self.color_pixel(self.photo, (x + 1, y), color)
-#         self.color_pixel(self.photo, (x, y + 1), color)
-#         self.color_pixel(self.photo, (x + 1, y + 1), color)
-#         self.color_pixel(self.photo, (x - 1, y), color)
-#         self.color_pixel(self.photo, (x - 1, y + 1), color)
-#         self.color_pixel(self.photo, (x - 1, y + 2), color)
-#         self.color_pixel(self.photo, (x, y + 2), color)
-#         self.color_pixel(self.photo, (x + 1, y + 2), color)
-#
-#
-#     def pause_drawing(self, event):
-#         self.stop_drawing = True
-#
-#
-#     def resume_drawing(self, event):
-#         self.stop_drawing = False
-#
-#     def run_canvas(self):
-#         self.root.bind('<Motion>', self.detect_motion)
-#         self.root.bind('<Button-1>', self.pause_drawing)
-#         self.root.bind('<Button-3>', self.resume_drawing)
-#         label = tk.Label(self.root, image=self.photo)
-#         label.grid()
-#         self.root.mainloop()
-
-
-
 
 
 

@@ -89,9 +89,9 @@ class HomeScreen:
         logo_lbl.pack()
         logo_lbl.place(x=400, y=100)
 
-        about_us_button = tk.Button(self.root, text="About Us", bg="blue4", fg="snow", height=2, width=10,
-                                    command=self.design_about_us_screen())
-        about_us_button.place(x=1180, y=20)
+        # about_us_button = tk.Button(self.root, text="About Us", bg="blue4", fg="snow", height=2, width=10,
+        #                             command=self.design_about_us_screen())
+        # about_us_button.place(x=1180, y=20)
 
         # about_us_button = tk.Button(self.root, text="About Us", bg="blue4", fg="snow", height=2, width=10)
         # about_us_button.place(x=1180, y=20)
@@ -109,7 +109,7 @@ class HomeScreen:
         self.root.mainloop()
 
 
-
-
-
+if __name__ == "__main__":
+    app = HomeScreen()
+    app.design_home_screen()
 

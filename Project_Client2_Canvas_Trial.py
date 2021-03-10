@@ -1,8 +1,6 @@
 import threading
 import tkinter as tk
 # from Project_Canvas_Screen import CanvasScreen
-from select import select
-
 from Updated_Project_Canvas_Screen import CanvasScreen
 import socket
 import pickle
@@ -12,7 +10,6 @@ import sys
 # app = SampleApp()
 
 class Client(object):
-    POSITION_LIST_LENGTH = 500
 
     def __init__(self, ip, port):
         self.ip = ip
@@ -20,14 +17,15 @@ class Client(object):
 
     def start(self):
         try:
-            print('connecting to ip %s port %s' % (self.ip, self.port))
+            print('connecting to ip %s port %s' % (ip, port))
             # Create a TCP/IP socket
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.connect((self.ip, self.port))
+            sock.connect((ip, port))
             print('connected to server')
             # send receive example
             msg = sock.recv(1024)
             print('received message: %s' % msg.decode())
+            sock.sendall('Hello this is client, send me a job'.encode())
             #implement here your main logic
             self.handleServerJob(sock)
         except socket.error as e:
@@ -52,46 +50,27 @@ class Client(object):
             # lstlst = pickle.loads(serverSocket.recv(25600).decode())
             # print(lstlst)
 
-    def gambit(self, app: CanvasScreen, server_socket):
+    def gambit(self, app: CanvasScreen, serverSocket):
         while app.running:
-            data = pickle.dumps(app.positions_lst)
+            lst_to_send = app.positions_lst
 
-            server_socket.send(data)
-            app.positions_lst = []
+            # data = pickle.dumps(lst_to_send)
+            # serverSocket.send(pickle.dumps(lst_to_send_len))
 
-            # Receive the screen data from the server
-            screen = self.recv_data_in_chunks(server_socket)
+            # for i in range(0, len(data), 1024):
+            # serverSocket.send(data)
+            # print(pickle.loads(serverSocket.recv(25600)))
 
-            # Draw all pixels on the screen
+            serverSocket.send(pickle.dumps(lst_to_send))
+            if app.positions_lst:
+                print(app.positions_lst)
+            try:
+                screen = pickle.loads(serverSocket.recv(25600))
+            except Exception as e:
+                screen = []
             for pixel in screen:
                 app.color_pixel_for_server(app.photo, pixel[1], pixel[0])
 
-    def read_from_server(self, read_list, app):
-        for sock in read_list:
-            screen = pickle.loads(self.recv_data_in_chunks(sock))
-            for pixel in screen:
-                app.color_pixel_for_server(app.photo, pixel[1], pixel[0])
-
-    def write_to_server(self, write_list, app):
-        for sock in write_list:
-            data = pickle.dumps(app.positions_lst)
-
-            sock.send(data)
-            app.positions_lst = []
-
-    def recv_data_in_chunks(self, sock):
-            BUFF_SIZE = 4096  # 4 KiB
-            data = b''
-            while True:
-                part = sock.recv(BUFF_SIZE)
-                data += part
-                if len(part) < BUFF_SIZE:
-                    # either 0 or end of data
-                    break
-            return pickle.loads(data)
-
-    def recv_data_in_chunks1(self, client_socket):
-        return pickle.loads(client_socket.recv(25600))
         # while True:
         #     can_start = serverSocket.recv(1024).decode()
         #     if can_start == "START":
@@ -120,8 +99,8 @@ class Client(object):
 
 
 
-# if __name__ == '__main__':
-#     ip = '192.168.1.33'
-#     port = 1730
-#     c = Client(ip, port)
-#     c.start()
+if __name__ == '__main__':
+    ip = '192.168.1.33'
+    port = 1730
+    c = Client(ip, port)
+    c.start()
