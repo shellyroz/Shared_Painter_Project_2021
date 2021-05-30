@@ -1,6 +1,6 @@
 import socket
 import threading
-from Project_Screens import SampleApp
+from Project_Screens_trial import SampleApp
 from Project_Canvas_Screen import CanvasScreen
 import pickle
 

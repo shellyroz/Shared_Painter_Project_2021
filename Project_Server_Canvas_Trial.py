@@ -1,3 +1,4 @@
+'''3.12-1.4-6.4-5.5-4.2'''
 import tkinter as tk
 from select import select
 
@@ -6,12 +7,14 @@ import socket
 import threading
 import pickle
 import sys
-from sign_up_database import Users
-from login_database import Users1
+from sign_up_database1 import Users
+from login_database1 import Users1
 from Project_Email_Handle import EmailBot
+import hashlib
+# from Hash_Encryption_Trial import Encryption
 
 
-class Server(object):
+class Server1(object):
 
     def __init__(self, ip, port):
         self.ip = ip
@@ -23,19 +26,42 @@ class Server(object):
         self.sign_up_database = Users()
         self.login_database = Users1()
         self.email_sender = EmailBot()
+        #self.e = Encryption()
 
+
+    def encrypt(self, password):
+        '''
+        The function encrypts a given password.
+        :param password: A given password.
+        '''
+        return hashlib.sha256(password.encode()).hexdigest()
 
     def sign_up(self, entry1, entry2, entry3):
-        self.sign_up_database.insert_user(entry1, entry2, entry3)
+        '''
+        The function which logs a new client's sign up information into
+        the designated sign up database.
+        :param entry1: The new client's entered email.
+        :param entry2: The new client's entered username.
+        :param entry3: The new client's entered password.
+        '''
+        encrypted_password = self.encrypt(entry3)
+        self.sign_up_database.insert_user(entry1, entry2, encrypted_password)
         self.sign_up_database.create_users_list()
 
 
     def login(self, entry2, entry3):
-        self.login_database.insert_user(entry2, entry3)
+        '''
+        The function which logs a client's login information into
+        the designated login database.
+        :param entry2: The client's entered username.
+        :param entry3: The client's entered password.
+        '''
+        encrypted_password = self.encrypt(entry3)
+        self.login_database.insert_user(entry2, encrypted_password)
         self.login_database.create_users_list()
         self.sign_up_database.create_users_list()
 
-        rtrn = self.sign_up_database.is_user_in_database(entry2, entry3)
+        rtrn = self.sign_up_database.is_user_in_database(entry2, encrypted_password)
 
         print(rtrn)
 
@@ -54,6 +80,12 @@ class Server(object):
 
 
     def is_login_code_ok(self, code_entry):
+        '''
+        The function checks whether the client's entered login code is correct or not.
+        :param code_entry: The client's code entry.
+        :return: True if the entered code is correct, and False if it is incorrect.
+        :rtype: bool.
+        '''
         entered_code = code_entry.get()
         print("entered code is: " + entered_code)
 
@@ -61,6 +93,14 @@ class Server(object):
 
 
     def check_to_change_password(self, entered_username):
+        '''
+        The function checks whether the client's entered username exists in the
+        sign up database or not.
+        :param entered_username: The client's entered username.
+        :return: True if the client's entered username exists in the
+        sign up database, and False if it does not.
+        :rtype: bool.
+        '''
         self.sign_up_database.create_users_list()
         print(entered_username)
         can_change_password = self.sign_up_database.is_username_in_database(entered_username)
@@ -69,21 +109,30 @@ class Server(object):
         return can_change_password
 
     def change_to_new_password(self, entered_username, new_password):
-        self.sign_up_database.change_password(entered_username, new_password)
+        '''
+        The function changes the client's password to an entered new password.
+        :param entered_username: The client's entered username.
+        :param new_password: The client's entered password.
+        '''
+        encrypted_new_password = self.encrypt(new_password)
+        self.sign_up_database.change_password(entered_username, encrypted_new_password)
         # self.sign_up_database.create_users_list()
         # print(self.sign_up_database.users_list)
 
     def start(self):
+        '''
+        The function connects clients to the server.
+        '''
         try:
             print('server starts up on ip %s port %s' % (self.ip, self.port))
             # Create a TCP/IP socket
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.bind((self.ip, self.port))
-            sock.listen(3)
+            sock.listen(5)
             while True:
                 client, addr = sock.accept()
                 self.clients_lst.append(client)
-                client.send("#mottimotti".encode())
+                client.send("#cybercyber".encode())
                 self.handleClient(client)
         except socket.error as e:
             print(e)
@@ -112,12 +161,21 @@ class Server(object):
 
 
     def handleClient(self, clientSock):
+        '''
+        The function handles client connections.
+        :param clientSock: The current client's socket.
+        '''
         print("hello")
         client_handler = threading.Thread(target=self.handle_client_connection, args=(clientSock,))
         # without comma you'd get a... TypeError: handle_client_connection() argument after * must be a sequence, not _socketobject
         client_handler.start()
 
     def handle_client_connection(self, client_socket):
+        '''
+        The function sends data from the server to all clients connected to the server,
+        except from the client that sent the data.
+        :param client_socket: The socket of the client who sent the data.
+        '''
         # print("start")
         # client_socket.sendall(str("START").encode())
         # pos_lst_size = pickle.loads(client_socket.recv(25600)) * 8 # Size is in bytes. Thus, we need to convert to bits.
@@ -160,6 +218,12 @@ class Server(object):
                 client.send(pickle.dumps(data))
 
     def recv_data_in_chunks(self, sock):
+        '''
+        The function receives data from the client and loads it in chunks.
+        :param sock: The client's socket.
+        :return: The function returns the received data.
+        :rtype: list.
+        '''
         BUFF_SIZE = 4096  # 4 KiB
         data = b''
         while True:
@@ -171,9 +235,10 @@ class Server(object):
         return pickle.loads(data)
 
 
+
 if __name__ == '__main__':
    ip = '192.168.1.35'
    # ip = '172.19.225.89'
    port = 1730
-   s = Server(ip, port)
+   s = Server1(ip, port)
    s.start()

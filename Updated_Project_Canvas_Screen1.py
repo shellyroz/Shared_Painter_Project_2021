@@ -7,13 +7,13 @@ from PIL import ImageTk, Image
 
 import pyautogui
 
-from sign_up_database import Users
-from login_database import Users1
+from sign_up_database1 import Users
+from login_database1 import Users1
 from Project_Email_Handle import EmailBot
-from Project_Server_Canvas_Trial import Server
+from Project_Server import Server
 
 
-class CanvasScreen:
+class CanvasScreen1:
     def __init__(self):
         self.root = tk.Tk()
         self.server = Server('192.168.1.35', 1730)
@@ -26,16 +26,21 @@ class CanvasScreen:
         self.forgot_password_frame = tk.Frame(self.root, bg="#%02x%02x%02x" % (243, 249, 151), height=1100, width=2000)
         self.change_password_frame = tk.Frame(self.root, bg="#%02x%02x%02x" % (243, 249, 151), height=1100, width=2000)
         self.change_password_new_frame = tk.Frame(self.root, bg="#%02x%02x%02x" % (243, 249, 151), height=1100, width=2000)
+        self.canvas_frame = tk.Frame(self.root, bg="#%02x%02x%02x" % (243, 249, 151), width=460, height=720)
+        self.logo_photo = ImageTk.PhotoImage(Image.open('small_project_logo_png.png'))
+        self.logo_label = tk.Label(self.canvas_frame, image=self.logo_photo)
         self.root.title("SHARED PAINTER - CANVAS")
         # self.is_login_pressed = False
         # self.is_sign_up_pressed = False
         self.cursor = 'spider'
-        self.canvas_frame = tk.Frame(self.root)
+        #self.canvas_frame = tk.Frame(self.root)
         self.photo = tk.PhotoImage(width=1500, height=1100) #w=900
         self.canvas_label = tk.Label(self.root, image=self.photo, cursor=self.cursor)
         self.color = "#000000"
         self.brush_sizes_lst = []
         self.brush_size = 1
+        self.brush_types_lst = []
+        self.brush_type = "●"
         self.mouse_x_positions_lst = []
         self.stop_drawing = False
         self.positions_lst = []
@@ -100,10 +105,12 @@ class CanvasScreen:
 
 
         # B = tk.Button(self.sign_up_frame, text="OK - SIGN UP", command=database_stuff)
-        B = tk.Button(self.sign_up_frame, text="OK - SIGN UP", font=sign_up_font, command= lambda: self.sign_up_database_stuff(email_entry, username_entry, password_entry))
+        B = tk.Button(self.sign_up_frame, text="OK - SIGN UP", bg="DarkBlue", font=sign_up_font,
+                      fg='snow', command= lambda: self.sign_up_database_stuff(email_entry, username_entry, password_entry))
         B.pack(side='left', padx=20, pady=20)
 
-        back_home = tk.Button(self.sign_up_frame, text="BACK", font=sign_up_font, command=self.back_from_sign_up)
+        back_home = tk.Button(self.sign_up_frame, text="BACK", bg="DarkBlue", font=sign_up_font,
+                              fg='snow', command=self.back_from_sign_up)
         back_home.pack(side='right', padx=20, pady=20)
 
         self.root.title(f"SHARED PAINTER - SIGN UP")
@@ -247,10 +254,12 @@ class CanvasScreen:
 
 
         # B = tk.Button(self.sign_up_frame, text="OK - SIGN UP", command=database_stuff)
-        B = tk.Button(self.sign_up_frame, text="OK - SIGN UP", font=sign_up_font, command= lambda: self.sign_up_database_stuff(email_entry, username_entry, password_entry))
+        B = tk.Button(self.sign_up_frame, text="OK - SIGN UP", bg="DarkBlue", font=sign_up_font,
+                              fg='snow', command= lambda: self.sign_up_database_stuff(email_entry, username_entry, password_entry))
         B.pack(side='left', padx=20, pady=20)
 
-        back_home = tk.Button(self.sign_up_frame, text="BACK", font=sign_up_font, command=self.back_from_sign_up)
+        back_home = tk.Button(self.sign_up_frame, text="BACK", bg="DarkBlue", font=sign_up_font,
+                              fg='snow', command=self.back_from_sign_up)
         back_home.pack(side='right', padx=20, pady=20)
 
         # print(self.is_sign_up_pressed)
@@ -283,14 +292,16 @@ class CanvasScreen:
 
 
         # B = tk.Button(self.login_frame, text="OK - LOGIN", command=database_stuff)
-        B = tk.Button(self.login_frame, text="OK - LOGIN", font=login_font, command= lambda: self.login_database_stuff(username_entry, password_entry))
+        B = tk.Button(self.login_frame, text="OK - LOGIN", bg="DarkBlue", font=login_font, fg='snow',
+                      command= lambda: self.login_database_stuff(username_entry, password_entry))
         B.pack(side='left', padx=20, pady=20)
 
-        back_home = tk.Button(self.login_frame, text="BACK", font=login_font, command=self.back_from_login)
+        back_home = tk.Button(self.login_frame, text="BACK", bg="DarkBlue", font=login_font,
+                                           fg='snow', command=self.back_from_login)
         back_home.pack(padx=20, pady=20, anchor='center')
 
-        forgot_password_button = tk.Button(self.login_frame, text="Forgot" + "\n" + "Password", font=login_font,
-                                           command=self.forgot_password_screen)
+        forgot_password_button = tk.Button(self.login_frame, text="Forgot" + "\n" + "Password", bg="DarkBlue", font=login_font,
+                                           fg='snow', command=self.forgot_password_screen)
         forgot_password_button.pack(side='right', padx=20, pady=20)
 
         # go_back_button = tk.Button(self.login_frame, text="BACK", command=self.design_initial_screen)
@@ -388,8 +399,8 @@ class CanvasScreen:
             code_entry = tk.Entry(self.code_incorrect_frame, font=login_code_font)
             code_entry.pack(pady=10)
 
-            check_code_button = tk.Button(self.code_incorrect_frame, text='Continue', font=login_code_font,
-                                          command=lambda: self.is_entered_code_ok(code_entry))
+            check_code_button = tk.Button(self.code_incorrect_frame, text='Continue', bg="DarkBlue", font=login_code_font,
+                                          fg='snow', command=lambda: self.is_entered_code_ok(code_entry))
             check_code_button.pack()
 
 
@@ -408,7 +419,8 @@ class CanvasScreen:
         code_entry = tk.Entry(self.login_code_frame, font=login_code_font)
         code_entry.pack(pady=10)
 
-        check_code_button = tk.Button(self.login_code_frame, text='Continue', font=login_code_font, command= lambda: self.is_entered_code_ok(code_entry))
+        check_code_button = tk.Button(self.login_code_frame, text='Continue', bg="DarkBlue", font=login_code_font,
+                                      fg='snow', command= lambda: self.is_entered_code_ok(code_entry))
         check_code_button.pack()
 
         self.root.title(f"SHARED PAINTER - LOGIN")
@@ -470,7 +482,7 @@ class CanvasScreen:
 
         # new_password = password_entry.get()
         #self.change_password(entered_username, password_entry)
-        B = tk.Button(self.change_password_frame, text='Continue', font=login_font,
+        B = tk.Button(self.change_password_frame, text='Continue', bg="DarkBlue", font=login_font, fg='snow',
                                           command= lambda: self.change_password(entered_username, password_entry, B))
         B.pack()
 
@@ -512,8 +524,8 @@ class CanvasScreen:
         username_entry = tk.Entry(self.forgot_password_frame, font=login_font)
         username_entry.pack(pady=10)
 
-        check_username_button = tk.Button(self.forgot_password_frame, text='Continue', font=login_font,
-                                          command=lambda: self.check_and_change_password(username_entry))
+        check_username_button = tk.Button(self.forgot_password_frame, text='Continue', bg="DarkBlue", font=login_font,
+                                          fg='snow', command=lambda: self.check_and_change_password(username_entry))
         check_username_button.pack()
 
         self.root.title(f"SHARED PAINTER - FORGOT PASSWORD")
@@ -532,8 +544,8 @@ class CanvasScreen:
         username_entry = tk.Entry(self.forgot_password_frame, font=login_font)
         username_entry.pack(pady=10)
 
-        check_username_button = tk.Button(self.forgot_password_frame, text='Continue', font=login_font,
-                                          command=lambda: self.check_and_change_password(username_entry))
+        check_username_button = tk.Button(self.forgot_password_frame, text='Continue', bg="DarkBlue", font=login_font,
+                                          fg='snow', command=lambda: self.check_and_change_password(username_entry))
         check_username_button.pack()
 
         self.root.title(f"SHARED PAINTER - FORGOT PASSWORD")
@@ -662,13 +674,16 @@ class CanvasScreen:
 
 
         # B = tk.Button(self.login_frame, text="OK - LOGIN", command=database_stuff)
-        B = tk.Button(self.login_frame, text="OK - LOGIN", font=login_font, command= lambda: self.login_database_stuff(username_entry, password_entry))
+        B = tk.Button(self.login_frame, text="OK - LOGIN", bg="DarkBlue", font=login_font, fg='snow',
+                      command= lambda: self.login_database_stuff(username_entry, password_entry))
         B.pack(side='left', padx=20, pady=20)
 
-        back_home = tk.Button(self.login_frame, text="BACK", font=login_font, command=self.back_from_login)
+        back_home = tk.Button(self.login_frame, text="BACK", bg="DarkBlue",
+                              font=login_font, fg='snow', command=self.back_from_login)
         back_home.pack(padx=20, pady=20, anchor='center')
 
-        forgot_password_button = tk.Button(self.login_frame, text="Forgot" + "\n" + "Password", font=login_font, command=self.forgot_password_screen)
+        forgot_password_button = tk.Button(self.login_frame, text="Forgot" + "\n" + "Password", bg="DarkBlue",
+                                           font=login_font, fg='snow', command=self.forgot_password_screen)
         forgot_password_button.pack(side='right', padx=20, pady=20)
 
         # go_back_button = tk.Button(self.login_frame, text="BACK", command=self.design_initial_screen)
@@ -715,8 +730,8 @@ class CanvasScreen:
         about_us_label = tk.Label(self.about_us_frame, text=about_us_text, bg=bg_color, font=("Segoe Print", 15))
         about_us_label.pack(pady=150, anchor='center')
 
-        back_home = tk.Button(self.about_us_frame, text="BACK", font=("Segoe Print", 16),
-                              command=self.back_from_about_us)
+        back_home = tk.Button(self.about_us_frame, text="BACK", bg="DarkBlue",
+                              font=("Segoe Print", 16), fg='snow', command=self.back_from_about_us)
         back_home.pack()
 
         self.root.mainloop()
@@ -748,7 +763,8 @@ class CanvasScreen:
         about_us_label = tk.Label(self.about_us_frame, text=about_us_text, bg=bg_color, font=("Segoe Print", 15))
         about_us_label.pack(pady=150, anchor='center')
 
-        back_home = tk.Button(self.about_us_frame, text="BACK", font=("Segoe Print", 16), command=self.back_from_about_us)
+        back_home = tk.Button(self.about_us_frame, text="BACK", bg="DarkBlue",
+                              font=("Segoe Print", 16), command=self.back_from_about_us)
         back_home.pack()
 
         self.root.mainloop()
@@ -851,12 +867,51 @@ class CanvasScreen:
         sizes_Lb.bind('<<ListboxSelect>>', lambda x: self.chosen_size(sizes_Lb))
         sizes_Lb.pack()
 
-        sizes_Lb.insert(1, 1)
-        sizes_Lb.insert(2, 2)
-        sizes_Lb.insert(3, 3)
-        sizes_Lb.insert(4, 4)
+        for i in range(1, 6):
+            sizes_Lb.insert(i, i)
+
+        # sizes_Lb.insert(1, 1)
+        # sizes_Lb.insert(2, 2)
+        # sizes_Lb.insert(3, 3)
+        # sizes_Lb.insert(4, 4)
 
         screen.mainloop()
+    
+    def chosen_type(self, types_Lb):
+        chosen_value_index = types_Lb.curselection()[0]
+        if chosen_value_index == 0:
+            chosen_value = '●'
+
+        elif chosen_value_index == 1:
+            chosen_value = '*'
+
+        self.brush_types_lst.append(chosen_value)
+        print(chosen_value)
+
+        if self.brush_types_lst != []:
+            self.brush_type = self.brush_types_lst[-1]
+
+
+    def choose_brush_type(self):
+        screen = tk.Tk()
+        screen.title("Brush Type")
+
+        types_Lb = tk.Listbox(screen)
+        types_Lb.bind('<<ListboxSelect>>', lambda x: self.chosen_type(types_Lb))
+        types_Lb.pack()
+
+        types_Lb.insert(1, "●")
+        types_Lb.insert(1, "*")
+        
+        screen.mainloop()
+
+    def choose_color(self):
+        # variable to store hexadecimal code of color
+        color_code = colorchooser.askcolor(title="Color Palette")
+        print("Shelly Rozman")
+        self.color = color_code[1]
+        print("dA GAMBIT")
+        print(color_code)
 
 
     def design_canvas_screen(self):
@@ -873,33 +928,52 @@ class CanvasScreen:
         bg_color = "#%02x%02x%02x" % (243, 249, 151)
         self.root["background"] = bg_color
 
-        self.canvas_frame.pack()
+        self.canvas_frame.pack(side=tk.LEFT)
+        self.logo_label.photo = self.logo_photo
+        self.logo_label.pack(side='top', pady=70)
 
-        def choose_color():
+        '''def choose_color():
             # variable to store hexadecimal code of color
             color_code = colorchooser.askcolor(title="Color Palette")
             print("Shelly Rozman")
             self.color = color_code[1]
             print("dA GAMBIT")
-            print(color_code)
+            print(color_code)'''
+
 
         bg_color = "#%02x%02x%02x" % (243, 249, 151)
-        frame = tk.Frame(self.root, width=460, height=720, bg=bg_color)
-        frame.pack(side=tk.LEFT)
+
+        # canvas_frame = tk.Frame(self.root, width=460, height=720, bg=bg_color)
+        # self.canvas_frame.pack(side=tk.LEFT)
+
+        # logo_photo = ImageTk.PhotoImage(Image.open('small_project_logo_png.png'))
+        # logo_label = tk.Label(self.canvas_frame, image=logo_photo)
+        # logo_label.pack()
+
         # color_palate_button = tk.Button(frame, text="Color Palette", bg="medium violet red", fg="snow",
         #                                 height=2, width=10, command=choose_color)
-        color_palate_button = tk.Button(frame, text="Color Palette", bg="medium violet red", fg="snow",
-                                        height=2, width=10, command=choose_color)
+        color_palate_button = tk.Button(self.canvas_frame, text="Color Palette", bg="medium violet red", font=("Segoe Print", 11),
+                                        fg="snow", height=2, width=10, command=self.choose_color)
         # # color_palate_button.place(x=10, y=10)
-        color_palate_button.pack(side=tk.LEFT, padx=10, pady=10)
+        # color_palate_button.pack(side=tk.LEFT, padx=10, pady=10)
+        color_palate_button.pack(padx=120, pady=10)
         #
+        eraser_button = tk.Button(self.canvas_frame, text="Eraser", bg="medium violet red", font=("Segoe Print", 11),
+                                  fg="snow", height=2, width=10, command=self.set_color_as_eraser)
+        # eraser_button.pack(side=tk.RIGHT, padx=10, pady=10)
+        eraser_button.pack(padx=120, pady=10)
 
+        brush_type_button = tk.Button(self.canvas_frame, text="Brush Type", bg="medium violet red", font=("Segoe Print", 11),
+                                      fg="snow", height=2, width=10, command=self.choose_brush_type)
+        # brush_type_button.pack(side=tk.BOTTOM, pady=10, anchor='center')
+        brush_type_button.pack(padx=120, pady=10)
         # color_palate_button.lower()
         #
-        brush_size_button = tk.Button(frame, text="Brush Size", bg="medium violet red", fg="snow",
-                                        height=2, width=10, command=self.choose_brush_size)
+        brush_size_button = tk.Button(self.canvas_frame, text="Brush Size", bg="medium violet red", font=("Segoe Print", 11),
+                                      fg="snow", height=2, width=10, command=self.choose_brush_size)
         # # brush_size_button.place(x=10, y=80)
-        brush_size_button.pack(side=tk.LEFT, padx=50, pady=80)
+        # brush_size_button.pack(padx=10, pady=10, anchor='center')
+        brush_size_button.pack(padx=120, pady=10)
         # frame1 = tk.Frame(self.root, width=460, height=720, bg=bg_color)
         # frame1.pack(side=tk.LEFT)
         #
@@ -918,9 +992,7 @@ class CanvasScreen:
         # verify_password_entry = tk.Entry(self)
         # verify_password_entry.pack(pady=10)
 
-        eraser_button = tk.Button(frame, text="Eraser", bg="medium violet red", fg="snow",
-                                        height=2, width=10, command=self.set_color_as_eraser)
-        eraser_button.pack(side=tk.LEFT, padx=50, pady=80)
+
 
 
 
@@ -944,11 +1016,11 @@ class CanvasScreen:
     #
     #     else:
     #         pass
-    def color_pixel(self, image, pos):
+    def color_pixel(self, pos):
         """Place pixel at pos=(x,y) on image, with color=(r,g,b)."""
         if not self.stop_drawing:
             x, y = pos
-            image.put(self.color, (x, y))
+            self.photo.put(self.color, (x, y))
 
         else:
             pass
@@ -959,9 +1031,9 @@ class CanvasScreen:
         # self.canvas_label = tk.Label(self.root, image=self.photo, cursor=self.cursor)
         # self.canvas_label.pack()
 
-    def color_pixel_for_server(self, image, pos, color):
+    def color_pixel_for_server(self, pos, color):
         """Place pixel at pos=(x,y) on image, with color=(r,g,b)."""
-        image.put(color, pos)
+        self.photo.put(color, pos)
 
     def update_positions_lst(self, coords):
         for coord in coords:
@@ -970,7 +1042,8 @@ class CanvasScreen:
         self.positions_lst.append((self.color, coords))
 
     def detect_motion(self, event):
-        x, y = event.x + 60, event.y + 25
+        #x, y = event.x + 5, event.y + 25
+        x, y = pyautogui.position()[0] - 415, pyautogui.position()[1]
         #real_x = pyautogui.position()[0]
 
         #if real_x < 326:
@@ -999,15 +1072,54 @@ class CanvasScreen:
         # self.color_pixel(self.photo, (x, y + 2), self.color)
         # self.color_pixel(self.photo, (x + 1, y + 2), self.color)
 
-        self.color_pixel(self.photo, (x, y))
+        # self.color_pixel((x, y))
         # self.positions_lst.append((self.color, (x, y)))
-        self.update_positions_lst((x, y))
+        # self.update_positions_lst((x, y))
         # self.positions_lst = [(self.color, (x, y))]
 
-        if self.brush_size == 2 or self.brush_size == 3 or self.brush_size == 4:
-            self.color_pixel(self.photo, (x + 1, y))
-            self.color_pixel(self.photo, (x, y + 1))
-            self.color_pixel(self.photo, (x + 1, y + 1))
+        # Color all pixels according to the brush size
+        if self.brush_type == "●":
+            for i in range(x, x + self.brush_size):
+                for j in range(y, y + self.brush_size):
+                    if x >= 0:
+                        self.color_pixel((i, j))
+                        self.update_positions_lst((i, j))
+
+
+        # TODO make something out of this - draws asterisks
+        elif self.brush_type == "*":
+            for i in range(self.brush_size):
+                pixels_to_color = [(x, y), (x + i, y), (x + i, y + i), (x, y + i), (x - i, y), (x - i, y - i),
+                                   (x, y - i)]
+                # Eliminate repetitions
+                pixels_to_color = list(set(pixels_to_color))
+                # Color and append to the positions list every pixel in the list
+                for pixel in pixels_to_color:
+                    if x >= 0:
+                        self.color_pixel(pixel)
+                        self.update_positions_lst(pixel)
+
+        # Color all pixels according to the brush size
+        # for i in range(self.brush_size):
+        #     pixels_to_color = [(x + i, y), (x + i, y + i), (x, y + i)]
+        #     # Eliminate repetitions
+        #     pixels_to_color = list(set(pixels_to_color))
+        #     # Color and append to the positions list every pixel in the list
+        #     for pixel in pixels_to_color:
+        #         self.color_pixel(pixel)
+        #         self.update_positions_lst(pixel)
+
+        'IMPORTANT'
+        # for i in range(x, x + self.brush_size):
+        #     for j in range(y, y + self.brush_size):
+        #         self.color_pixel((i, j))
+        #         self.update_positions_lst((i, j))
+
+
+        """if self.brush_size == 2 or self.brush_size == 3 or self.brush_size == 4:
+            self.color_pixel((x + 1, y))
+            self.color_pixel((x, y + 1))
+            self.color_pixel((x + 1, y + 1))
             self.update_positions_lst((x + 1, y))
             self.update_positions_lst((x, y + 1))
             self.update_positions_lst((x + 1, y + 1))
@@ -1016,11 +1128,11 @@ class CanvasScreen:
             # self.positions_lst.append((self.color, (x + 1, y + 1)))
 
         if self.brush_size == 3 or self.brush_size == 4:
-            self.color_pixel(self.photo, (x - 1, y))
-            self.color_pixel(self.photo, (x - 1, y + 1))
-            self.color_pixel(self.photo, (x - 1, y + 2))
-            self.color_pixel(self.photo, (x, y + 2))
-            self.color_pixel(self.photo, (x + 1, y + 2))
+            self.color_pixel((x - 1, y))
+            self.color_pixel((x - 1, y + 1))
+            self.color_pixel((x - 1, y + 2))
+            self.color_pixel((x, y + 2))
+            self.color_pixel((x + 1, y + 2))
             self.update_positions_lst((x - 1, y))
             self.update_positions_lst((x - 1, y + 1))
             self.update_positions_lst((x - 1, y + 2))
@@ -1034,13 +1146,13 @@ class CanvasScreen:
 
 
         if self.brush_size == 4:
-            self.color_pixel(self.photo, (x + 2, y))
-            self.color_pixel(self.photo, (x + 2, y + 1))
-            self.color_pixel(self.photo, (x + 2, y + 2))
-            self.color_pixel(self.photo, (x + 2, y + 3))
-            self.color_pixel(self.photo, (x + 1, y + 3))
-            self.color_pixel(self.photo, (x, y + 3))
-            self.color_pixel(self.photo, (x - 1, y + 3))
+            self.color_pixel((x + 2, y))
+            self.color_pixel((x + 2, y + 1))
+            self.color_pixel((x + 2, y + 2))
+            self.color_pixel((x + 2, y + 3))
+            self.color_pixel((x + 1, y + 3))
+            self.color_pixel((x, y + 3))
+            self.color_pixel((x - 1, y + 3))
             self.update_positions_lst((x + 2, y))
             self.update_positions_lst((x + 2, y + 1))
             self.update_positions_lst((x + 2, y + 2))
@@ -1072,7 +1184,7 @@ class CanvasScreen:
         # self.color_pixel(self.photo, (x - 1, y + 1))
         # self.color_pixel(self.photo, (x - 1, y + 2))
         # self.color_pixel(self.photo, (x, y + 2))
-        # self.color_pixel(self.photo, (x + 1, y + 2))
+        # self.color_pixel(self.photo, (x + 1, y + 2))"""
 
 
     def pause_drawing(self, event):
@@ -1105,11 +1217,11 @@ class CanvasScreen:
         # label.place(x=100, y=0)
         self.canvas_label.pack()
         self.root.title(f"SHARED PAINTER - {self.current_username}")
-        # self.root.mainloop()
+        self.root.mainloop()
 
 
 if __name__ == "__main__":
-    app = CanvasScreen()
+    app = CanvasScreen1()
     # app.design_login_screen()
     app.design_initial_screen()
     # app.design_canvas_screen()

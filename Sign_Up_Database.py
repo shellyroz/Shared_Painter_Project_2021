@@ -1,9 +1,13 @@
+# Name: Shelly Rozman
+# Python Version: 3.7.2
+# Date: 14/3/2021
+
 import sqlite3
 import tkinter as tk
 import tkinter.messagebox
 
 
-class Users:
+class SignedUpUsers:
     """Creates database with users table includes:
        create query
        insert query
@@ -34,38 +38,34 @@ class Users:
         return "table  name is ", self.__tablename
 
     def get_table_name(self):
+        '''
+        The function returns the table's title.
+        :return: The table's title.
+        :rtype: string.
+        '''
         return self.__tablename
 
     def insert_user(self, email, username, password):
+        '''
+        The function inserts given information into the database.
+        :param email: A given email address.
+        :param username: A given username.
+        :param password: A given password.
+        '''
         conn = sqlite3.connect('project_users_database.db')
         insert_query = "INSERT INTO " + self.__tablename + " (" + self.__email + "," + self.__username + "," + self.__password + ") VALUES " \
                                                                                                             "(" + "'" + email + "'" + "," + "'" + username + "'" + "," + "'" + password + "'" + ");"
         print(insert_query)
         conn.execute(insert_query)
+
         conn.commit()
         conn.close()
         print("Record created successfully")
 
-    def select_user_by_id(self, username):
-        conn = sqlite3.connect('project_users_database.db')
-        print("Opened database successfully")
-        str1 = "select * from new_clients_sign_ups;"
-
-        """strsql = "SELECT username, email, password  from " +  self.__tablename + " where " + self.__userId + "=" \
-            + str(username)
-        """
-        print(str1)
-        cursor = conn.execute(str1)
-        for row in cursor:
-            print("email = ", row[0])
-            print("username = ", row[1])
-            print("password = ", row[2])
-
-        print("Operation done successfully")
-        conn.close()
-
-
     def print_users(self):
+        '''
+        The function prints the information of all the users in the database.
+        '''
         conn = sqlite3.connect('project_users_database.db')
         print("Opened database successfully")
         str1 = "select * from new_clients_sign_ups;"
@@ -84,6 +84,9 @@ class Users:
         conn.close()
 
     def create_users_list(self):
+        '''
+        The function creates a list of all the users' in the database information.
+        '''
         conn = sqlite3.connect('project_users_database.db')
         print("Opened database successfully")
         str1 = "select * from new_clients_sign_ups;"
@@ -103,8 +106,16 @@ class Users:
         print("Operation done successfully")
         conn.close()
 
-
     def is_user_in_database(self, given_username, given_password):
+        '''
+        The function checks whether a user is in the database or not.
+        :param given_username: The user's entered username.
+        :param given_password: The user's entered password.
+        :return: "U_ERROR" if the entered username does not match the existing password,
+        "P_ERROR" if the entered password does not match the existing username, or "ERROR"
+        if a different error has occurred/
+        :rtype: string.
+        '''
         for lst in self.users_list:
             if lst[1] == given_username and lst[2] == given_password:
                 return lst[0]
@@ -121,43 +132,38 @@ class Users:
                                         message="The password you entered is incorrect. Please try again.")
                 return "P_ERROR"
 
-            # elif lst[1] != given_username and lst[2] != given_password:
-            #     tk.messagebox.showerror(title="ERROR",
-            #                             message="Both the username and password you entered are incorrect. Please try again.")
-            #     return "U&P_ERROR"
-
-        return "ERROR"
-
-
     def is_username_in_database(self, entered_username):
+        '''
+        The function checks whether a username is in the database or not.
+        :param entered_username: An entered username.
+        :return: True if the username is in the database, and False otherwise.
+        :rtype: bool.
+        '''
         for lst in self.users_list:
             if entered_username == lst[1]:
                 return True
 
         return False
 
+    def email_by_username(self, entered_username):
+        '''
+        The function checks whether a username is in the database or not.
+        :param entered_username: An entered username.
+        :return: True if the username is in the database, and False otherwise.
+        :rtype: bool.
+        '''
+        for lst in self.users_list:
+            if entered_username == lst[1]:
+                return lst[0]
 
-    # def change_password(self, original_password, new_password):
-    #     conn = sqlite3.connect('project_users_database.db')
-    #     print("Opened database successfully")
-    #
-    #     # str1 = "UPDATE " + self.__tablename + " SET password = " + new_password + " WHERE password = " + original_password
-    #     #
-    #     # # cursor = conn.execute(str1)
-    #     # conn.execute(str1)
-    #     # sql = ''' UPDATE new_clients_sign_ups
-    #     #               SET password = new_password ,
-    #     #               WHERE password = WeDare'''
-    #     # cur = conn.cursor()
-    #     # cur.execute(sql)
-    #     # conn.commit()
-    #
-    #     cur = conn.cursor()
-    #     cur.execute("""UPDATE new_clients_sign_ups SET password=? WHERE password=? """, (new_password, original_password))
-
-
+        return "ERROR"
 
     def remove_old_record_from_users_list(self, entered_username):
+        '''
+        The function deletes an outdated record from the database's users list
+        after changing a user's password.
+        :param entered_username: The entered username of a client whose password was changed.
+        '''
         def deep_index(lst, val):
             return [(i, sub.index(val)) for (i, sub) in enumerate(lst) if val in sub]
 
@@ -167,10 +173,12 @@ class Users:
 
         self.users_list.remove(self.users_list[place_to_delete])
 
-
-
-
     def change_password(self, entered_username, new_password):
+        '''
+        The function updates the database and inserts a given new password in the line of a given username.
+        :param entered_username: A client's entered username.
+        :param new_password: A client's entered new password.
+        '''
         try:
             sqliteConnection = sqlite3.connect('project_users_database.db')
             cursor = sqliteConnection.cursor()
@@ -194,44 +202,3 @@ class Users:
             if sqliteConnection:
                 sqliteConnection.close()
                 print("The SQLite connection is closed")
-
-
-
-    # def to_change_password(self, entered_username, new_password):
-    #     print("Before changing password:")
-    #     print(self.users_list)
-    #     for lst in self.users_list:
-    #         if lst[1] == entered_username:
-    #             self.change_password(entered_username, new_password)
-
-
-    # def change_password(self, entered_username, new_password):
-    #     place = 0
-    #     print("Taylor")
-    #     print(self.users_list)
-    #     for i in range(len(self.users_list)):
-    #         if entered_username == self.users_list[i][1]:
-    #             place = i
-    #
-    #     self.users_list[place][2] = new_password
-    #     self.create_users_list()
-    #     print("The Queen")
-    #     print(self.users_list)
-
-
-
-# u = Users()
-# u.insert_user("olivia@gamil.com", "Shelly", "TS1989")
-# u.insert_user("meredith@gamil.com", "Betty", "20Lifetimes")
-# u.insert_user("benjamin@gmail.com", "August", "Never13Mine")
-# u.insert_user("taylorswift@gamil.com", "Taylor", "1989")
-
-# u.select_user_by_id(1)
-
-u = Users()
-u.create_users_list()
-print(u.users_list)
-
-#u.change_password("Betty", "cardigans")
-# u.create_users_list()
-# print(u.users_list)

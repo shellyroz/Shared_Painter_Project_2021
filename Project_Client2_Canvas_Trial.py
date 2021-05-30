@@ -1,7 +1,7 @@
 import threading
 import tkinter as tk
 # from Project_Canvas_Screen import CanvasScreen
-from Updated_Project_Canvas_Screen import CanvasScreen
+from Updated_Project_Canvas_Screen1 import CanvasScreen
 import socket
 import pickle
 import sys
